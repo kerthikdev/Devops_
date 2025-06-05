@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5001:5001"  # Host 5001 → Container 5001 (Flask)
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
