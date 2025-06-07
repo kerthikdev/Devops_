@@ -1,0 +1,9 @@
+# filebeat/filebeat.yml
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/flask_app.log
+
+output.logstash:
+  hosts: ["logstash:5044"]
