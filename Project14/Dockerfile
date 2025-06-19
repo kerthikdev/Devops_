@@ -1,17 +1,17 @@
-# Use Alpine-based Python image
-FROM python:3.12-alpine
+# Use official Python image
+FROM python:3.10-slim
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy the local app.py to the container's /app directory
-COPY ./app.py /app/
-
-# Install Flask dependency
+# Copy requirements (if any) and install Flask
 RUN pip install flask
 
-# Expose port 5000 for the application
+# Copy app code
+COPY app.py .
+
+# Expose port
 EXPOSE 5000
 
-# Command to run the Flask app
+# Run the app
 CMD ["python", "app.py"]

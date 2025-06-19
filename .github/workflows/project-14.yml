@@ -1,55 +1,30 @@
-name: Project14 - Docker Build and Trivy Scan
+name: Build and Scan Docker Image
 
 on:
   push:
-    paths:
-      - '**'           # Trigger on any change inside Project14/
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    paths:
-      - '**'
-    branches: [ main ]
 
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      # Step 2: Set up Docker Buildx
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # Step 3: Build Docker image
       - name: Build Docker image
-        run: docker build -t project14-app:latest .
+        run: |
+          docker build -t flask-app:latest .
 
-      # Step 4: Install Trivy
       - name: Install Trivy
         run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.41.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.41.0_Linux-64bit.deb
 
-      # Step 5: Scan Docker image with Trivy
       - name: Scan Docker image with Trivy
         run: |
-          trivy image \
-            --format json \
-            --output trivy-report.json \
-            --severity HIGH,CRITICAL \
-            --ignore-unfixed \
-            --exit-code 0 \
-            project14-app:latest
-
-      # Optional: Show Trivy output in logs for debugging
-      - name: Show Trivy report
-        run: cat trivy-report.json
-
-      # Step 6: Upload Trivy report as artifact
-      - name: Upload Trivy report
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-report
-          path: trivy-report.json
+          trivy image --exit-code 1 --severity HIGH,CRITICAL flask-app:latest
