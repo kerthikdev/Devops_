@@ -16,8 +16,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t flask-app:latest .
+      - name: Verify files and build image
+        run: |
+          echo "Working directory: $(pwd)"
+          echo "Listing files:"
+          ls -la
+          docker build -t flask-app:latest .
 
       - name: Install Trivy
         run: |
