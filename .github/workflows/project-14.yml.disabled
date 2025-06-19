@@ -1,4 +1,4 @@
-name: Build and Scan Docker Image (Project15)
+name: Build and Scan Docker Image (Project14)
 
 on:
   push:
@@ -16,11 +16,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Build Docker image from Project15 folder
+      - name: Build Docker image from Project14 folder
         run: |
-          echo "Building from: ${{ github.workspace }}/Project15"
-          ls -la ${{ github.workspace }}/Project15
-          docker build -t flask-app:latest Project15
+          echo "Building from: ${{ github.workspace }}/Project14"
+          ls -la ${{ github.workspace }}/Project14
+          docker build -t flask-app:latest Project14
 
       - name: Install Trivy
         run: |

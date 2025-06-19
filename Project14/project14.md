@@ -1,0 +1,2 @@
+1. as same as above like write a code , push to github , create a docker image and push to docker hub
+2. with help of trivy the , the trivy will scan the docker image and give the report of vulnerabilities

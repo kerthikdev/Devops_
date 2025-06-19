@@ -1,17 +1,30 @@
-# Use official Python image
-FROM python:3.10-slim
+# Use official slim Alpine Python image
+FROM python:3.10-alpine
 
-# Set working directory
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy requirements (if any) and install Flask
-RUN pip install flask
+# Install system dependencies for building Python packages
+RUN apk update && apk add --no-cache \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    openssl-dev \
+    build-base
 
-# Copy app code
-COPY app.py .
+# Copy requirements and install them
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
+# Copy application code
+COPY . .
+
+# Expose port for Flask
 EXPOSE 5000
 
-# Run the app
+# Run the Flask app
 CMD ["python", "app.py"]
