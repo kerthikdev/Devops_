@@ -3,23 +3,19 @@ name: Project14 - Docker Build and Trivy Scan
 on:
   push:
     paths:
-      - 'Project14/**'  # Only trigger when files in Project14/ change
+      - '**'           # Trigger on any change inside Project14/
     branches: [ main ]
   pull_request:
     paths:
-      - 'Project14/**'
+      - '**'
     branches: [ main ]
 
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: Project14  # Run all shell steps inside Project14/
-
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,7 +23,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Step 3: Build the Docker image
+      # Step 3: Build Docker image
       - name: Build Docker image
         run: docker build -t project14-app:latest .
 
@@ -36,7 +32,7 @@ jobs:
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 
-      # Step 5: Scan Docker image with Trivy and save output
+      # Step 5: Scan Docker image with Trivy
       - name: Scan Docker image with Trivy
         run: |
           trivy image \
@@ -47,13 +43,13 @@ jobs:
             --exit-code 0 \
             project14-app:latest
 
-      # Optional: Show Trivy output in logs
-      - name: Debug - Show Trivy Report
+      # Optional: Show Trivy output in logs for debugging
+      - name: Show Trivy report
         run: cat trivy-report.json
 
-      # Step 6: Upload the Trivy scan report as an artifact
-      - name: Upload Trivy report as artifact
-        uses: actions/upload-artifact@v3
+      # Step 6: Upload Trivy report as artifact
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-report
-          path: Project14/trivy-report.json
+          path: trivy-report.json
