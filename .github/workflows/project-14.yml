@@ -1,4 +1,4 @@
-name: Build and Scan Docker Image
+name: Build and Scan Docker Image (Project15)
 
 on:
   push:
@@ -16,9 +16,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Verify files and build image
+      - name: Change to Project15 and build image
+        working-directory: Project15
         run: |
-          echo "Working directory: $(pwd)"
+          echo "In folder: $(pwd)"
           echo "Listing files:"
           ls -la
           docker build -t flask-app:latest .
