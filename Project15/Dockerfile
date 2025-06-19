@@ -1,17 +1,21 @@
-# Use official Python image
+# Use official slim Python base image
 FROM python:3.10-slim
 
-# Set working directory
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy requirements (if any) and install Flask
-RUN pip install flask
+# Install dependencies
+RUN pip install --no-cache-dir flask
 
-# Copy app code
-COPY app.py .
+# Copy the application code
+COPY . .
 
-# Expose port
+# Expose the Flask port
 EXPOSE 5000
 
-# Run the app
+# Command to run the application
 CMD ["python", "app.py"]

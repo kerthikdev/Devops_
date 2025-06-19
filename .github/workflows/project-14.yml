@@ -16,13 +16,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Change to Project15 and build image
-        working-directory: Project15
+      - name: Build Docker image from Project15 folder
         run: |
-          echo "In folder: $(pwd)"
-          echo "Listing files:"
-          ls -la
-          docker build -t flask-app:latest .
+          echo "Building from: ${{ github.workspace }}/Project15"
+          ls -la ${{ github.workspace }}/Project15
+          docker build -t flask-app:latest Project15
 
       - name: Install Trivy
         run: |
