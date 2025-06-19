@@ -1,0 +1,17 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  group_by: ['alertname']
+  group_wait: 5s
+  group_interval: 10s
+  repeat_interval: 10s
+  receiver: 'slack-notifications'
+
+receivers:
+  - name: 'slack-notifications'
+    slack_configs:
+      - send_resolved: true
+        username: 'AlertmanagerBot'
+        channel: '#linux'
+        webhook_url: 'https://hooks.slack.com/services/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'

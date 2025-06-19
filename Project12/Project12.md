@@ -1,0 +1,3 @@
+1. we need to take a backup of the database or files that are stored , they are zipped and stored in current directory of host machine 
+2. the process does with the help of mount option , firstly we will mount the docker volume to the temporary linux machine and secondly we will mount the current directory of the host machine to the temporary linux machine 
+3. finally we are moving it to the minIo bucket using the minio client

@@ -4,3 +4,8 @@
 4. the logstash will parse the log and sent it to elasticsearch 
 5. the elasticsearch will store the log and we can see it in kibana
 6. kibana will show the log in the dashboard 
+
+filebeat => logstash => elasticsearch => kibana
+Flask App → Writes logs → Filebeat → Forwards logs → Logstash → Parses logs → Elasticsearch → Stores logs → Kibana → Visualizes logs
+
+

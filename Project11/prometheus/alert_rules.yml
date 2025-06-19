@@ -1,0 +1,11 @@
+groups:
+- name: app-alerts
+  rules:
+  -f alert: NodeExporterDown
+    expr: up{job="node-exporter"} == 0
+    for: 30s
+    labels:
+      severity: critical
+    annotations:
+      summary: "Node Exporter is Down"
+      description: "Prometheus could not scrape node-exporter at {{ $labels.instance }} for 30s. This may indicate Prometheus is unhealthy or node-exporter is down."
