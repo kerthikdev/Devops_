@@ -1,0 +1,47 @@
+- name: Deploy Flask App to EC2 (Amazon Linux)
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Update yum package cache
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Python3 and pip
+      yum:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Install virtualenv (optional)
+      pip:
+        name: virtualenv
+        executable: pip3
+
+    - name: Create Flask app directory
+      file:
+        path: /home/ec2-user/flask_app
+        state: directory
+        owner: ec2-user
+        group: ec2-user
+
+    - name: Copy Flask app to EC2
+      copy:
+        src: ./flask_app/
+        dest: /home/ec2-user/flask_app/
+        owner: ec2-user
+        group: ec2-user
+        mode: 0755
+
+    - name: Install Flask app requirements
+      pip:
+        requirements: /home/ec2-user/flask_app/requirements.txt
+        executable: pip3
+
+    - name: Run Flask app in background
+      shell: |
+        nohup python3 /home/ec2-user/flask_app/app.py > flask.log 2>&1 &
+      args:
+        chdir: /home/ec2-user/flask_app/
