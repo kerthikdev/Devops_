@@ -1,0 +1,49 @@
+- name: Ensure the user 'flaskuser' exists
+  user:
+    name: flaskuser
+    shell: /bin/bash
+    home: /home/flaskuser
+    create_home: yes
+
+- name: Install required system packages using yum
+  yum:
+    name:
+      - python3
+      - python3-pip
+    state: present
+
+- name: Install Flask using pip
+  pip:
+    name: flask
+    executable: pip3
+
+- name: Ensure the Flask app directory exists
+  file:
+    path: /home/flaskuser/flaskapp
+    state: directory
+    owner: flaskuser
+    group: flaskuser
+    mode: '0755'
+
+- name: Copy Flask app file
+  copy:
+    src: app.py
+    dest: /home/flaskuser/flaskapp/app.py
+    owner: flaskuser
+    group: flaskuser
+    mode: '0644'
+
+- name: Copy systemd service file
+  copy:
+    src: flaskapp.service
+    dest: /etc/systemd/system/flaskapp.service
+    mode: '0644'
+
+- name: Reload systemd to pick up new service
+  command: systemctl daemon-reload
+
+- name: Enable and start the Flask service
+  systemd:
+    name: flaskapp
+    enabled: true
+    state: started

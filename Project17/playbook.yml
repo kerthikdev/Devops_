@@ -1,0 +1,5 @@
+- name: Deploy Flask App with systemd
+  hosts: flask
+  become: true
+  roles:
+    - flaskapp
